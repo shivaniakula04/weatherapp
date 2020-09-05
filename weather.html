@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8>
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="weatherstyle.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Fondamento&family=Grenze+Gotisch:wght@600&family=Modak&display=swap" rel="stylesheet"/>
+</head>
+<body>
+	<div class="totalapp">
+		<h1>Weather</h1>
+		<br/><br/>
+		<p class="box">
+			<input id="city" type="text" placeholder="search city" value="">
+			<button id="button">search</button>
+			<br/><br/>
+			<p1 id="loc">No search found :(</p1>
+			</br></br>
+			<p2 id="text"></p2>
+			<br/><br/>
+			<img id="imageid"/>
+			<p3 id="desc"></p3>
+			<br/><br/>
+		</p>
+<script type="text/javascript">
+document.getElementById("button").addEventListener("click",loadText);
+function loadText()
+{
+	var a=document.getElementById("city").value;
+	console.log("button clicked");
+	var xhr=new XMLHttpRequest();
+	console.log(xhr);
+	console.log(a);
+	
+	xhr.open('GET',`https://api.openweathermap.org/data/2.5/weather?q=${a}&units=metric&APPID=6e14d2078ee76e60ab46a621915b479b`,true);
+	xhr.onreadystatechange=function()
+	{
+		console.log('READYSTATE: ',xhr.readyState);
+		if(xhr.readyState==4 && xhr.status==200)
+		{
+			var data=JSON.parse(xhr.responseText);
+			console.log(data);
+			console.log(data.main.temp);
+			document.getElementById("text").innerHTML=data.main.temp+"`C";
+			document.getElementById("desc").innerHTML=data.weather[0].description;
+			
+			var imageicon=data.weather[0].icon;
+			console.log(imageicon);
+			document.getElementById("imageid").src=`https://openweathermap.org/img/w/${imageicon}.png`;
+			document.getElementById("loc").innerHTML=a+","+data.sys.country;
+			
+		}
+		else
+		{
+			document.getElementById("loc").innerHTML="Server not found :(";
+		}
+	}
+	xhr.send();
+}
+</script>
+	</div>
+</body>
+</html>
